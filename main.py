@@ -36,8 +36,8 @@ ball_x_speed = 0.2 * ball_bounce_speed
 def updateSpeed():
     global ball_bounce_speed, ball_x_speed, ball_y_speed  # Declare as global to modify the variables
     ball_bounce_speed += 0.1  # Increment the bounce speed
-    ball_x_speed = 0.2 * ball_bounce_speed
-    ball_y_speed = 0.2 * ball_bounce_speed
+    ball_x_speed = 0.2 * ball_bounce_speed * (-1 if ball_x_speed < 0 else 1)
+    ball_y_speed = 0.2 * ball_bounce_speed * (-1 if ball_y_speed < 0 else 1)
 
 
 # Display the score
