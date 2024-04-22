@@ -6,6 +6,7 @@ from pygame.locals import (
     K_w,
     K_s,
     KEYDOWN,
+    KEYUP,
     QUIT,
 )
 
@@ -17,17 +18,17 @@ SCREEN_HEIGHT = 600
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pg.display.set_caption("Pong")
 
-# player 1 variebls
+# player 1 variables
 player_x_1 = SCREEN_WIDTH - 30
 player_y_1 = SCREEN_HEIGHT // 2
 player_1_score = 0
 
-# player 2 varibles
+# player 2 variables
 player_x_2 = 30
 player_y_2 = SCREEN_HEIGHT // 2
 player_2_score = 0
 
-# ball variebels
+# ball variables
 ball_x = SCREEN_WIDTH // 2
 ball_y = SCREEN_HEIGHT // 2
 ball_radius = 10
@@ -36,14 +37,21 @@ ball_speed = 0.5
 ball_y_speed = 0.2 * ball_speed
 ball_x_speed = 0.2 * ball_speed
 
-
-# function to have the balls speed flipped if it hits the player
+# function to have the ball's speed flipped if it hits the player
 def update_speed():
     global ball_x_speed, ball_y_speed, ball_speed
     ball_speed += 1
     ball_x_speed = 0.1 * ball_speed * (-1 if ball_x_speed < 0 else 1)  # maintain direction when speeding up
     ball_y_speed = 0.1 * ball_speed * (-1 if ball_y_speed < 0 else 1)
 
+# Flags to track continuous movement
+move_up_1 = False
+move_down_1 = False
+move_up_2 = False
+move_down_2 = False
+
+# Movement speeds
+player_speed = 0.5  # Adjust speed as needed
 
 # score
 font = pg.font.Font(None, 36)
@@ -57,21 +65,42 @@ while running:
             running = False
         if event.type == KEYDOWN:
             if event.key == K_DOWN:
-                player_y_1 += 30
+                move_down_1 = True
             elif event.key == K_UP:
-                player_y_1 -= 30
+                move_up_1 = True
             elif event.key == K_w:
-                player_y_2 -= 30
+                move_up_2 = True
             elif event.key == K_s:
-                player_y_2 += 30
+                move_down_2 = True
             elif event.key == K_ESCAPE:
                 running = False
+        if event.type == KEYUP:
+            if event.key == K_DOWN:
+                move_down_1 = False
+            elif event.key == K_UP:
+                move_up_1 = False
+            elif event.key == K_w:
+                move_up_2 = False
+            elif event.key == K_s:
+                move_down_2 = False
 
-    # the balls force
+    # Continuous movement for player 1
+    if move_down_1:
+        player_y_1 += player_speed
+    if move_up_1:
+        player_y_1 -= player_speed
+
+    # Continuous movement for player 2
+    if move_down_2:
+        player_y_2 += player_speed
+    if move_up_2:
+        player_y_2 -= player_speed
+
+    # the ball's movement
     ball_y += ball_y_speed
     ball_x += ball_x_speed
 
-    # ball hits the flore or roof
+    # ball hits the floor or roof
     if ball_y <= 0 + ball_radius or ball_y >= SCREEN_HEIGHT - ball_radius:
         ball_y_speed *= -1
 
@@ -80,28 +109,32 @@ while running:
         player_2_score += 1
         ball_x, ball_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
         ball_speed = 0.75
-        ball_x_speed = 0.2 * ball_speed  # reset speed to right
+        ball_x_speed = 0.2 * ball_speed  # reset speed to the right
         ball_y_speed = 0.2 * ball_speed
-        player_y_1, player_y_2 = SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
+        player_y_1, player_y_2 = SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2
 
     # player 1 scores
     if ball_x <= 0 + ball_radius:
         player_1_score += 1
         ball_x, ball_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
         ball_speed = 0.75
-        ball_x_speed = -0.2 * ball_speed  # reset speed to left
+        ball_x_speed = -0.2 * ball_speed  # reset speed to the left
         ball_y_speed = 0.2 * ball_speed
-        player_y_1, player_y_2 = SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
+        player_y_1, player_y_2 = SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2
 
     # Collision with Player 1
-    if ((player_x_1 - 1 <= ball_x + ball_radius <= player_x_1) and
-            (player_y_1 - 75 - ball_radius <= ball_y <= player_y_1 + ball_radius)):
+    if (
+        (player_x_1 - 1 <= ball_x + ball_radius <= player_x_1)
+        and (player_y_1 - 75 - ball_radius <= ball_y <= player_y_1 + ball_radius)
+    ):
         ball_x_speed *= -1
         update_speed()
 
     # Collision with Player 2
-    if ((player_x_2 <= ball_x - ball_radius <= player_x_2 + 1) and
-            (player_y_2 - 75 - ball_radius <= ball_y <= player_y_2 + ball_radius)):
+    if (
+        (player_x_2 <= ball_x - ball_radius <= player_x_2 + 1)
+        and (player_y_2 - 75 - ball_radius <= ball_y <= player_y_2 + ball_radius)
+    ):
         ball_x_speed *= -1
         update_speed()
 
