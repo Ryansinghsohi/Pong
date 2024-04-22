@@ -31,17 +31,19 @@ player_2_score = 0
 ball_x = SCREEN_WIDTH // 2
 ball_y = SCREEN_HEIGHT // 2
 ball_radius = 10
-ball_speed = 1
+ball_speed = 0.5
 
 ball_y_speed = 0.2 * ball_speed
 ball_x_speed = 0.2 * ball_speed
 
-# function to have the balls speed fliped if it hits the player
+
+# function to have the balls speed flipped if it hits the player
 def update_speed():
     global ball_x_speed, ball_y_speed, ball_speed
     ball_speed += 1
     ball_x_speed = 0.1 * ball_speed * (-1 if ball_x_speed < 0 else 1)  # maintain direction when speeding up
     ball_y_speed = 0.1 * ball_speed * (-1 if ball_y_speed < 0 else 1)
+
 
 # score
 font = pg.font.Font(None, 36)
@@ -77,25 +79,29 @@ while running:
     if ball_x >= SCREEN_WIDTH - ball_radius:
         player_2_score += 1
         ball_x, ball_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
-        ball_speed = 1
+        ball_speed = 0.75
         ball_x_speed = 0.2 * ball_speed  # reset speed to right
         ball_y_speed = 0.2 * ball_speed
+        player_y_1, player_y_2 = SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
 
     # player 1 scores
     if ball_x <= 0 + ball_radius:
         player_1_score += 1
         ball_x, ball_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
-        ball_speed = 1
+        ball_speed = 0.75
         ball_x_speed = -0.2 * ball_speed  # reset speed to left
         ball_y_speed = 0.2 * ball_speed
+        player_y_1, player_y_2 = SCREEN_HEIGHT//2, SCREEN_HEIGHT//2
 
     # Collision with Player 1
-    if (player_x_1 - 10 <= ball_x + ball_radius <= player_x_1) and (player_y_1 - 75 <= ball_y <= player_y_1):
+    if ((player_x_1 - 1 <= ball_x + ball_radius <= player_x_1) and
+            (player_y_1 - 75 - ball_radius <= ball_y <= player_y_1 + ball_radius)):
         ball_x_speed *= -1
         update_speed()
 
     # Collision with Player 2
-    if (player_x_2 <= ball_x - ball_radius <= player_x_2 + 10) and (player_y_2 - 75 <= ball_y <= player_y_2):
+    if ((player_x_2 <= ball_x - ball_radius <= player_x_2 + 1) and
+            (player_y_2 - 75 - ball_radius <= ball_y <= player_y_2 + ball_radius)):
         ball_x_speed *= -1
         update_speed()
 
