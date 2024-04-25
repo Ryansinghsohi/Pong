@@ -37,12 +37,14 @@ ball_speed = 0.5
 ball_y_speed = 0.2 * ball_speed
 ball_x_speed = 0.2 * ball_speed
 
+
 # function to have the ball's speed flipped if it hits the player
 def update_speed():
     global ball_x_speed, ball_y_speed, ball_speed
     ball_speed += 1
     ball_x_speed = 0.1 * ball_speed * (-1 if ball_x_speed < 0 else 1)  # maintain direction when speeding up
     ball_y_speed = 0.1 * ball_speed * (-1 if ball_y_speed < 0 else 1)
+
 
 # Flags to track continuous movement
 move_up_1 = False
