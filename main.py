@@ -28,6 +28,9 @@ player_x_2 = 30
 player_y_2 = SCREEN_HEIGHT // 2
 player_2_score = 0
 
+# player variebel
+player_height = 75
+
 # ball variables
 ball_x = SCREEN_WIDTH // 2
 ball_y = SCREEN_HEIGHT // 2
@@ -140,6 +143,23 @@ while running:
         ball_x_speed *= -1
         update_speed()
 
+    # player borders
+    # player 1 top border
+    if player_y_1 < 0 + player_height:
+        player_y_1 = 0 + player_height
+
+    # player 1 bottom border
+    if player_y_1 > SCREEN_HEIGHT:
+        player_y_1 = SCREEN_HEIGHT
+
+    # player 2 top border
+    if player_y_2 < 0 + player_height:
+        player_y_2 = 0 + player_height
+
+    # player 2 bottom border
+    if player_y_2 > SCREEN_HEIGHT:
+        player_y_2 = SCREEN_HEIGHT
+
     # fill the screen white
     screen.fill((255, 255, 255))
     # display score
@@ -152,8 +172,8 @@ while running:
     # display the ball
     pg.draw.circle(screen, (0, 0, 0), (ball_x, ball_y), ball_radius)
     # display the players
-    pg.draw.line(screen, (0, 0, 0), (player_x_2, player_y_2), (player_x_2, player_y_2 - 75), 10)
-    pg.draw.line(screen, (0, 0, 0), (player_x_1, player_y_1), (player_x_1, player_y_1 - 75), 10)
+    pg.draw.line(screen, (0, 0, 0), (player_x_2, player_y_2), (player_x_2, player_y_2 - player_height), 10)
+    pg.draw.line(screen, (0, 0, 0), (player_x_1, player_y_1), (player_x_1, player_y_1 - player_height), 10)
     pg.display.flip()
 
 pg.quit()
