@@ -15,6 +15,13 @@ pg.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
+# colors
+white = (0, 0, 0)
+black = (255, 255, 255)
+
+# score distance
+Score_dist = 30
+
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pg.display.set_caption("Pong")
 
@@ -30,6 +37,7 @@ player_2_score = 0
 
 # player variebel
 player_height = 75
+player_width = 10
 
 # ball variables
 ball_x = SCREEN_WIDTH // 2
@@ -163,17 +171,17 @@ while running:
     # fill the screen white
     screen.fill((255, 255, 255))
     # display score
-    text_score_1 = font.render(f"{player_1_score}", True, (0, 0, 0), (255, 255, 255))
-    text_score_2 = font.render(f"{player_2_score}", True, (0, 0, 0), (255, 255, 255))
-    textRect_1 = text_score_1.get_rect(center=(SCREEN_WIDTH // 2 + 30, 50))
-    textRect_2 = text_score_2.get_rect(center=(SCREEN_WIDTH // 2 - 30, 50))
+    text_score_1 = font.render(f"{player_1_score}", True, white, black)
+    text_score_2 = font.render(f"{player_2_score}", True, white, black)
+    textRect_1 = text_score_1.get_rect(center=(SCREEN_WIDTH // 2 + Score_dist, 50))
+    textRect_2 = text_score_2.get_rect(center=(SCREEN_WIDTH // 2 - Score_dist, 50))
     screen.blit(text_score_1, textRect_1)
     screen.blit(text_score_2, textRect_2)
     # display the ball
-    pg.draw.circle(screen, (0, 0, 0), (ball_x, ball_y), ball_radius)
+    pg.draw.circle(screen, white, (ball_x, ball_y), ball_radius)
     # display the players
-    pg.draw.line(screen, (0, 0, 0), (player_x_2, player_y_2), (player_x_2, player_y_2 - player_height), 10)
-    pg.draw.line(screen, (0, 0, 0), (player_x_1, player_y_1), (player_x_1, player_y_1 - player_height), 10)
+    pg.draw.line(screen, white, (player_x_2, player_y_2), (player_x_2, player_y_2 - player_height), player_width)
+    pg.draw.line(screen, white, (player_x_1, player_y_1), (player_x_1, player_y_1 - player_height), player_width)
     pg.display.flip()
 
 pg.quit()
